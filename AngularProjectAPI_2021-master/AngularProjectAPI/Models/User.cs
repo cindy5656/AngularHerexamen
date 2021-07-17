@@ -15,7 +15,7 @@ namespace AngularProjectAPI.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string FotoURL { get; set; }
-        public string Function { get; set; }
+        public string FunctionCompany { get; set; }
         public string LinkedInURL { get; set; }
         [NotMapped]
         public string Token { get; set; }

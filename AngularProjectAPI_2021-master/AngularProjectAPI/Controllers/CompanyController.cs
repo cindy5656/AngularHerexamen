@@ -42,6 +42,20 @@ namespace AngularProjectAPI.Controllers
             return Company;
         }
 
+        // GET: api/Company/5
+        [HttpGet("User/{userID}")]
+        public async Task<ActionResult<Company>> GetCompanyByUserID(int userID)
+        {
+            var Company = await _context.Companies.Where(x => x.CompanyManagerID == userID).FirstOrDefaultAsync();
+
+            if (Company == null)
+            {
+                return NotFound();
+            }
+
+            return Company;
+        }
+
         // PUT: api/Company/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

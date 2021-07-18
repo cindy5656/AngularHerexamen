@@ -10,9 +10,11 @@ namespace AngularProjectAPI.Models
     {
         [Key]
         public int CompanyID { get; set; }
-        public string Name { get; set; }
+        public string NameCompany { get; set; }
         public string Description { get; set; }
         public string Location { get; set; }
+        public int CompanyManagerID { get; set; }
+        public User CompanyManager { get; set; }
         public ICollection<User> Users { get; set; }
     }
 }

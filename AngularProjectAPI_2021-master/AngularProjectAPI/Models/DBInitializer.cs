@@ -41,7 +41,7 @@ namespace AngularProjectAPI.Models
                 );
             context.SaveChanges();
             context.Companies.AddRange(
-                new Company {  Users = context.Users.Where(x => x.UserID == 1).ToList(), Description = "Labo", Name = "Lavetan", Location = "Turnhout" }
+                new Company {  Users = context.Users.Where(x => x.UserID == 1).ToList(), Description = "Labo", NameCompany = "Lavetan", Location = "Turnhout" }
                 );
 
             /*context.Articles.AddRange(

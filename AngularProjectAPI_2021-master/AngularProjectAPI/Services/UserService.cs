@@ -17,17 +17,17 @@ namespace AngularProjectAPI.Services
     public class UserService : IUserService
     {
         private readonly AppSettings _appSettings;
-        private readonly DataContext _newsContext;
+        private readonly DataContext _context;
 
-        public UserService(IOptions<AppSettings> appSettings, DataContext newsContext)
+        public UserService(IOptions<AppSettings> appSettings, DataContext context)
         {
             _appSettings = appSettings.Value;
-            _newsContext = newsContext;
+            _context = context;
         }
 
         public User Authenticate(string username, string password)
         {
-            var user = _newsContext.Users.Include(r=>r.Role).SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = _context.Users.Include(r=>r.Role).SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)

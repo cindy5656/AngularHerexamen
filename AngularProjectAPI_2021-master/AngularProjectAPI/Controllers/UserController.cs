@@ -69,7 +69,7 @@ namespace AngularProjectAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async  Task<ActionResult<User>> PutUser(int id, User user)
         {
             if (id != user.UserID)
             {
@@ -80,7 +80,9 @@ namespace AngularProjectAPI.Controllers
 
             try
             {
+                _context.Users.Update(user);
                 await _context.SaveChangesAsync();
+                user = _userService.Authenticate(user.Username, user.Password);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -94,7 +96,7 @@ namespace AngularProjectAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(user);
         }
         private bool UserExists(int id)
         {

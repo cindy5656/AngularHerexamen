@@ -33,6 +33,13 @@ namespace AngularProjectAPI.Controllers
             return await _context.Users.ToListAsync();
         }
 
+        [HttpGet("byName")]
+        public async Task<ActionResult<IEnumerable<User>>> GetUserByName(string firstName, string lastName)
+        {
+            var users = await _context.Users.Where(x => x.FirstName == firstName && x.LastName == lastName).ToListAsync();
+            return users;
+        }
+
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {

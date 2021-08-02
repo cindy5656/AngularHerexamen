@@ -56,6 +56,19 @@ namespace AngularProjectAPI.Controllers
             return Company;
         }
 
+        [HttpGet("Werknemers/{companyID}")]
+        public async Task<ActionResult<IEnumerable<User>>> GetWerknemers(int companyID)
+        {
+            var users = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID).Where(x => x.RoleID == 4).Select(x => x.user).ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return users;
+        }
+
         // PUT: api/Company/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -133,6 +146,34 @@ namespace AngularProjectAPI.Controllers
         private bool CompanyExists(int id)
         {
             return _context.Companies.Any(e => e.CompanyID == id);
+        }
+
+        [HttpPost("User")]
+        public async Task<ActionResult<Company>> AddUserToCompany(int companyID, int userID, int roleID)
+        {
+            CompanyUserGroup companyUserGroup = new CompanyUserGroup();
+            companyUserGroup.CompanyID = companyID;
+            companyUserGroup.company = _context.Companies.Where(x => x.CompanyID == companyID).FirstOrDefault();
+            companyUserGroup.UserID = userID;
+            companyUserGroup.RoleID = roleID;
+            _context.CompanyUserGroup.Add(companyUserGroup);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (CompanyExists(companyUserGroup.CompanyGroupUserID))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetCompany", new { id = companyUserGroup.CompanyID }, companyUserGroup.company);
         }
     }
 }

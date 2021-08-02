@@ -23,6 +23,7 @@ namespace AngularProjectAPI.Data
         public DbSet<GroupUser> GroupUsers { get; set; }
 
         public DbSet<Group> Groups { get; set; }
+        public DbSet<CompanyUserGroup> CompanyUserGroup { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +33,7 @@ namespace AngularProjectAPI.Data
             modelBuilder.Entity<Company>().ToTable("Company");
             modelBuilder.Entity<GroupUser>().ToTable("GroupUser");
             modelBuilder.Entity<Group>().ToTable("Group");
+            modelBuilder.Entity<CompanyUserGroup>().ToTable("CompanyUserGroup");
             
         }
     }

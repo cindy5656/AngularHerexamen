@@ -20,8 +20,6 @@ namespace AngularProjectAPI.Data
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<GroupUser> GroupUsers { get; set; }
-
         public DbSet<Group> Groups { get; set; }
         public DbSet<CompanyUserGroup> CompanyUserGroup { get; set; }
         
@@ -31,7 +29,6 @@ namespace AngularProjectAPI.Data
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<Company>().ToTable("Company");
-            modelBuilder.Entity<GroupUser>().ToTable("GroupUser");
             modelBuilder.Entity<Group>().ToTable("Group");
             modelBuilder.Entity<CompanyUserGroup>().ToTable("CompanyUserGroup");
             

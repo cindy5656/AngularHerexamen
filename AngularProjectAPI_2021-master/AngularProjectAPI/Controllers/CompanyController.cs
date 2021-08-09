@@ -69,6 +69,19 @@ namespace AngularProjectAPI.Controllers
             return users;
         }
 
+        [HttpGet("Groepen/{companyID}")]
+        public async Task<ActionResult<IEnumerable<Group>>> GetGroepen(int companyID)
+        {
+            var groepen = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID).Select(x => x.group).ToListAsync();
+
+            if (groepen == null)
+            {
+                return NotFound();
+            }
+
+            return groepen;
+        }
+
         // PUT: api/Company/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

@@ -33,11 +33,7 @@ namespace AngularProjectAPI.Models
             context.SaveChanges();
 
             context.Groups.AddRange(
-                new Group {  Name = "IT", GroupManager = context.Users.Where(x => x.UserID == 1).FirstOrDefault(), GroupManagerID = 1, FotoURL = null, GroupUsers = context.Users.ToList(), Theme = null }
-                );
-            context.SaveChanges();
-            context.GroupUsers.AddRange(
-                new GroupUser {  Users= context.Users.Where(x => x.UserID == 1).ToList(), Groups = context.Groups.Where(x => x.GroupID == 1).ToList()}
+                new Group {  Name = "IT", FotoURL=null, Theme = null }
                 );
             context.SaveChanges();
             context.Companies.AddRange(

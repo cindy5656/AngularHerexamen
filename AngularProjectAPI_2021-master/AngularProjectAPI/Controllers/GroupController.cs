@@ -82,8 +82,8 @@ namespace AngularProjectAPI.Controllers
         {
             _context.Groups.Add(Group);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetGroup", new { id = Group.GroupID }, Group);
+            return Group;
+            //return CreatedAtAction("GetGroup", new { id = Group.GroupID }, Group);
         }
 
         // DELETE: api/Group/5

@@ -56,10 +56,23 @@ namespace AngularProjectAPI.Controllers
             return Company;
         }
 
+        [HttpGet("Beheerder/{userID}")]
+        public async Task<ActionResult<IEnumerable<Group>>> GetGroepenByBeheerder(int userID)
+        {
+            var groepen = await _context.CompanyUserGroup.Where(x => x.role.Name == "Beheerder" && x.group != null).Select(x => x.group).Distinct().ToListAsync();
+
+            if (groepen == null)
+            {
+                return NotFound();
+            }
+
+            return groepen;
+        }
+
         [HttpGet("Werknemers/{companyID}")]
         public async Task<ActionResult<IEnumerable<User>>> GetWerknemers(int companyID)
         {
-            var users = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID).Where(x => x.RoleID == 4).Select(x => x.user).ToListAsync();
+            var users = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID && x.role.Name == "Werknemer" && x.user != null).Select(x => x.user).Distinct().ToListAsync();
 
             if (users == null)
             {
@@ -72,7 +85,7 @@ namespace AngularProjectAPI.Controllers
         [HttpGet("Groepen/{companyID}")]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroepen(int companyID)
         {
-            var groepen = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID).Select(x => x.group).ToListAsync();
+            var groepen = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID && x.group != null).Select(x => x.group).Distinct().ToListAsync();
 
             if (groepen == null)
             {
@@ -162,13 +175,14 @@ namespace AngularProjectAPI.Controllers
         }
 
         [HttpPost("User")]
-        public async Task<ActionResult<Company>> AddUserToCompany(int companyID, int userID, int roleID)
+        public async Task<ActionResult<Company>> AddUserToCompany(int companyID, int userID, int roleID, int? groupID)
         {
             CompanyUserGroup companyUserGroup = new CompanyUserGroup();
             companyUserGroup.CompanyID = companyID;
             companyUserGroup.company = _context.Companies.Where(x => x.CompanyID == companyID).FirstOrDefault();
             companyUserGroup.UserID = userID;
             companyUserGroup.RoleID = roleID;
+            companyUserGroup.GroupID = groupID;
             _context.CompanyUserGroup.Add(companyUserGroup);
             try
             {

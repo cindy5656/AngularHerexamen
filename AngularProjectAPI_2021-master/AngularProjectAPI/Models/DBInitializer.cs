@@ -33,7 +33,7 @@ namespace AngularProjectAPI.Models
             context.SaveChanges();
 
             context.Groups.AddRange(
-                new Group {  Name = "IT", FotoURL=null, Theme = null }
+                new Group {  NameGroup = "IT", FotoURL=null, Theme = null }
                 );
             context.SaveChanges();
             context.Companies.AddRange(

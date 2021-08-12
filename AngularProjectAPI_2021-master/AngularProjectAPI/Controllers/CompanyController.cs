@@ -82,6 +82,19 @@ namespace AngularProjectAPI.Controllers
             return users;
         }
 
+        [HttpGet("Groepsleden")]
+        public async Task<ActionResult<IEnumerable<User>>> GetLeden(int groupID, int companyID)
+        {
+            var users = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID && x.role.Name == "Groepslid" && x.GroupID == groupID && x.user != null).Select(x => x.user).Distinct().ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return users;
+        }
+
         [HttpGet("Groepen/{companyID}")]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroepen(int companyID)
         {
@@ -93,6 +106,19 @@ namespace AngularProjectAPI.Controllers
             }
 
             return groepen;
+        }
+
+        [HttpGet("GetCompanyFromGroup/{groupID}")]
+        public async Task<ActionResult<Company>> GetCompanyFromGroup(int groupID)
+        {
+            var company = await _context.CompanyUserGroup.Where(x => x.GroupID == groupID && x.company != null).Select(x => x.company).Distinct().FirstOrDefaultAsync();
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return company;
         }
 
         // PUT: api/Company/5

@@ -15,7 +15,5 @@ namespace AngularProjectAPI.Models
         public string Location { get; set; }
         public string fotoURL { get; set; }
         public int CompanyManagerID { get; set; }
-        public User CompanyManager { get; set; }
-        public ICollection<User> Users { get; set; }
     }
 }

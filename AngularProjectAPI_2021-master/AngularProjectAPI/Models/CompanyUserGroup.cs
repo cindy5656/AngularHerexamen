@@ -12,16 +12,12 @@ namespace AngularProjectAPI.Models
         [Key]
         public int CompanyGroupUserID { get; set; }
         public int CompanyID { get; set; }
-        [NotMapped]
         public Company company { get; set; }
         public int? GroupID { get; set; }
-        [NotMapped]
         public Group group { get; set; }
         public int UserID { get; set; }
-        [NotMapped]
         public User user { get; set; }
         public int RoleID { get; set; }
-        [NotMapped]
         public Role role { get; set; }
     }
 }

@@ -29,6 +29,16 @@ namespace AngularProjectAPI.Controllers
             return await _context.Posts.ToListAsync();
         }
 
+        [HttpGet("GetPostsByUser/{userID}")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetPostsByUser(int userID)
+        {
+            var posts =  await _context.PostGroupUsers.Where(x => x.UserID == userID).Select(x => x.post).ToListAsync();
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return posts;
+        }
         // GET: api/Post/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
@@ -107,6 +117,33 @@ namespace AngularProjectAPI.Controllers
         {
             return _context.Posts.Any(e => e.PostID == id);
         }
-    
+
+        [HttpPost("AddPostToUserAndGroup")]
+        public async Task<ActionResult<Post>> AddPostToUserAndGroup(int postID, int userID, int groupID)
+        {
+            PostGroupUser postGroupUser = new PostGroupUser();
+            postGroupUser.UserID = userID;
+            postGroupUser.PostID = postID;
+            postGroupUser.GroupID = groupID;
+            _context.PostGroupUsers.Add(postGroupUser);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (PostExists(postGroupUser.PostID))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetPost", new { id = postGroupUser.PostID }, postGroupUser.post);
+        }
+
     }
 }

@@ -113,6 +113,21 @@ namespace AngularProjectAPI.Controllers
             return Post;
         }
 
+        [HttpDelete("DeletePostFromUserAndGroup/{postID}")]
+        public async Task<ActionResult<Post>> DeletePostFromUserAndGroup(int postID)
+        {
+            var postGroupUser = await _context.PostGroupUsers.Where(x => x.PostID == postID).FirstOrDefaultAsync();
+            if (postGroupUser == null)
+            {
+                return NotFound();
+            }
+
+            _context.PostGroupUsers.Remove(postGroupUser);
+            await _context.SaveChangesAsync();
+
+            return postGroupUser.post;
+        }
+
         private bool PostExists(int id)
         {
             return _context.Posts.Any(e => e.PostID == id);

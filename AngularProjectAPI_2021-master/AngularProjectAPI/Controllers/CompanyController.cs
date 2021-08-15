@@ -95,6 +95,19 @@ namespace AngularProjectAPI.Controllers
             return users;
         }
 
+        [HttpGet("GetBeheerdersRechtenFromUserID")]
+        public async Task<ActionResult<IEnumerable<Role>>> GetBeheerdersRechtenFromUserID(int companyID, int userID)
+        {
+            var roles = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID  && x.UserID == userID).Select(x => x.role).Distinct().ToListAsync();
+
+            if (roles == null)
+            {
+                return NotFound();
+            }
+
+            return roles;
+        }
+
         [HttpGet("Groepen/{companyID}")]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroepen(int companyID)
         {
@@ -193,6 +206,21 @@ namespace AngularProjectAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Company;
+        }
+
+        [HttpDelete("RolWegnemen")]
+        public async Task<ActionResult<CompanyUserGroup>> RolWegnemen(int companyID, int userID, int roleID, int? groupID)
+        {
+            var CompanyGroupUser = await _context.CompanyUserGroup.Where(x => x.CompanyID == companyID && x.RoleID== roleID && x.UserID == userID && (groupID == null || groupID == 0 || x.GroupID == groupID)).FirstOrDefaultAsync();
+            if (CompanyGroupUser == null)
+            {
+                return NotFound();
+            }
+
+            _context.CompanyUserGroup.Remove(CompanyGroupUser);
+            await _context.SaveChangesAsync();
+
+            return CompanyGroupUser;
         }
 
         private bool CompanyExists(int id)

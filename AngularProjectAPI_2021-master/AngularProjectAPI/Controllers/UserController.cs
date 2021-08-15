@@ -32,6 +32,12 @@ namespace AngularProjectAPI.Controllers
             var username = User.Claims.FirstOrDefault(c => c.Type == "Username").Value;
             return await _context.Users.ToListAsync();
         }
+        [HttpGet("{userID}")]
+        public async Task<ActionResult<User>> GetUser(int userID)
+        {
+            var user = await _context.Users.Where(x => x.UserID == userID).FirstOrDefaultAsync();
+            return user;
+        }
 
         [HttpGet("byName")]
         public async Task<ActionResult<IEnumerable<User>>> GetUserByName(string firstName, string lastName)

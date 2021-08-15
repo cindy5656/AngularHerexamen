@@ -11,5 +11,8 @@ namespace AngularProjectAPI.Models
         public string Subject { get; set; }
         public string Content { get; set; }
         public string FotoURL { get; set; }
+        public int AantalLikes { get; set; }
+        public int AantalDislikes { get; set; }
+
     }
 }

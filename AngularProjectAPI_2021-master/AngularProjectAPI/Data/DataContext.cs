@@ -25,6 +25,8 @@ namespace AngularProjectAPI.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostGroupUser> PostGroupUsers { get; set; }
         public DbSet<Reply> Replies { get; set; }
+        public DbSet<PostLikedBy> PostsLikedBy { get; set; }
+        public DbSet<PostDislikedBy> PostsDislikedBy { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +39,8 @@ namespace AngularProjectAPI.Data
             modelBuilder.Entity<Post>().ToTable("Post");
             modelBuilder.Entity<PostGroupUser>().ToTable("PostGroupUser");
             modelBuilder.Entity<Reply>().ToTable("Reply");
+            modelBuilder.Entity<PostLikedBy>().ToTable("PostLikedBy");
+            modelBuilder.Entity<PostDislikedBy>().ToTable("PostDislikedBy");
             
         }
     }

@@ -50,6 +50,30 @@ namespace AngularProjectAPI.Controllers
             }
             return posts;
         }
+
+        [HttpGet("CheckIfPostLikedByUser/{userID}")]
+        public async Task<ActionResult<IEnumerable<Post>>> CheckIfPostLikedByUser(int userID)
+        {
+            var posts = await _context.PostsLikedBy.Where(x => x.UserID == userID).Select(x => x.post).ToListAsync();
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return posts;
+        }
+
+        [HttpGet("CheckIfPostDislikedByUser/{userID}")]
+        public async Task<ActionResult<IEnumerable<Post>>> CheckIfPostDislikedByUser(int userID)
+        {
+            var posts = await _context.PostsDislikedBy.Where(x => x.UserID == userID).Select(x => x.post).ToListAsync();
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return posts;
+        }
+
+
         // GET: api/Post/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
@@ -144,6 +168,15 @@ namespace AngularProjectAPI.Controllers
             return _context.Posts.Any(e => e.PostID == id);
         }
 
+        private bool PostLikedByExists(int id)
+        {
+            return _context.PostsLikedBy.Any(e => e.PostLikedByID == id);
+        }
+        private bool PostDislikedByExists(int id)
+        {
+            return _context.PostsDislikedBy.Any(e => e.PostDislikedByID == id);
+        }
+
         [HttpPost("AddPostToUserAndGroup")]
         public async Task<ActionResult<Post>> AddPostToUserAndGroup(int postID, int userID, int groupID)
         {
@@ -171,5 +204,56 @@ namespace AngularProjectAPI.Controllers
             return CreatedAtAction("GetPost", new { id = postGroupUser.PostID }, postGroupUser.post);
         }
 
+        [HttpPost("PostLikedBy")]
+        public async Task<ActionResult<Post>> PostLikedBy(int postID, int userID)
+        {
+            PostLikedBy postLikedBy = new PostLikedBy();
+            postLikedBy.UserID = userID;
+            postLikedBy.PostID = postID;
+            _context.PostsLikedBy.Add(postLikedBy);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (PostLikedByExists(postLikedBy.PostLikedByID))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetPost", new { id = postLikedBy.PostID }, postLikedBy.post);
+        }
+
+        [HttpPost("PostDislikedBy")]
+        public async Task<ActionResult<Post>> PostDislikedBy(int postID, int userID)
+        {
+            PostDislikedBy postDislikedBy = new PostDislikedBy();
+            postDislikedBy.UserID = userID;
+            postDislikedBy.PostID = postID;
+            _context.PostsDislikedBy.Add(postDislikedBy);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (PostDislikedByExists(postDislikedBy.PostDislikedByID))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetPost", new { id = postDislikedBy.PostID }, postDislikedBy.post);
+        }
     }
 }

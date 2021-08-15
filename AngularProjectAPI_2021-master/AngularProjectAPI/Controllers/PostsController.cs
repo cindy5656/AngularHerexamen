@@ -39,6 +39,17 @@ namespace AngularProjectAPI.Controllers
             }
             return posts;
         }
+
+        [HttpGet("GetPostsByGroup/{groupID}")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetPostsByGroup(int groupID)
+        {
+            var posts = await _context.PostGroupUsers.Where(x => x.GroupID == groupID).Select(x => x.post).ToListAsync();
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return posts;
+        }
         // GET: api/Post/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(int id)
@@ -57,7 +68,7 @@ namespace AngularProjectAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPost(int id, Post Post)
+        public async Task<ActionResult<Post>> PutPost(int id, Post Post)
         {
             if (id != Post.PostID)
             {
@@ -82,7 +93,7 @@ namespace AngularProjectAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Post;
         }
 
         // POST: api/Post

@@ -24,6 +24,7 @@ namespace AngularProjectAPI.Data
         public DbSet<CompanyUserGroup> CompanyUserGroup { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostGroupUser> PostGroupUsers { get; set; }
+        public DbSet<Reply> Replies { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,6 +36,7 @@ namespace AngularProjectAPI.Data
             modelBuilder.Entity<CompanyUserGroup>().ToTable("CompanyUserGroup");
             modelBuilder.Entity<Post>().ToTable("Post");
             modelBuilder.Entity<PostGroupUser>().ToTable("PostGroupUser");
+            modelBuilder.Entity<Reply>().ToTable("Reply");
             
         }
     }
